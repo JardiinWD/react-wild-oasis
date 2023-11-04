@@ -4,6 +4,15 @@ import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
 
+import {
+  HiOutlineSquare2Stack,
+  HiOutlineTrash,
+  HiPencilSquare,
+} from "react-icons/hi2";
+import { useCreateCabin } from "./useCreateCabin";
+
+
+
 
 const TableRow = styled.div`
   display: grid;
@@ -49,7 +58,8 @@ const CabinRow = ({ cabin }) => {
   const [showForm, setShowForm] = useState(false)
   // Import from custom hook
   const { isDeleting, deleteCabin } = useDeleteCabin()
-
+  // Duplicate a cabin hook
+  const {isCreating, createCabin} = useCreateCabin() 
 
   // Destructuring of Cabin prop
   const {
@@ -58,10 +68,21 @@ const CabinRow = ({ cabin }) => {
     regularPrice, 
     discount, 
     image,
+    description,
     id: cabinId
   } = cabin
 
-  
+  function handleDuplicate() {
+    createCabin({
+      name: `Copy of ${name}`,
+      maxCapacity, 
+      regularPrice, 
+      discount, 
+      image,
+      description
+    })
+  }
+
 
   return (
     <>
@@ -72,16 +93,22 @@ const CabinRow = ({ cabin }) => {
         <Price>{formatCurrency(regularPrice)}</Price>
         {discount ? (<Discount>{formatCurrency(discount)}</Discount>) : (<span>&mdash;</span>)}
         <div>
+          {/* Duplicate Cabin */}
+          <button onClick={handleDuplicate} disabled={isCreating}>
+            <HiOutlineSquare2Stack />
+          </button>
+          {/* Edit Cabin */}
           <button
             onClick={() => setShowForm(show => !show)}
           >
-            Edit
+            <HiPencilSquare />
           </button>
+          {/* Delete Cabin */}
           <button 
             onClick={() => deleteCabin(cabinId)} 
             disabled={isDeleting}
           >
-            Delete
+            <HiOutlineTrash />
           </button>
         </div>
       </TableRow>

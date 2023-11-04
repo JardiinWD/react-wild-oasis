@@ -39,7 +39,7 @@ const App = () => {
               <Route path='cabins' element={<Cabins />} />
               <Route path='account' element={<Account />} />
               <Route path='settings' element={<Settings />} />
-              <Route path='user' element={<Users />} />
+              <Route path='users' element={<Users />} />
             </Route>
             <Route path='login' element={<Login />} />
             <Route path='*' element={<PageNotFound />} />

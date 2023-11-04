@@ -9,7 +9,7 @@ import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
 
   // == MUTATE FUNCTIONS ==
   const { isCreating, createCabin } = useCreateCabin()
@@ -55,7 +55,8 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         },
         {
           onSuccess : () => {
-            reset()
+            reset();
+            onCloseModal?.();
           }
         }
       );
@@ -82,7 +83,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmitForm, onError)}>
+    <Form onSubmit={handleSubmit(onSubmitForm, onError)} type={onCloseModal ? 'modal' : 'regular'}>
       <FormRow 
         errorMsg={errors?.name?.message} 
         label='Cabin name'
@@ -174,7 +175,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" onClick={() => onCloseModal?.()}>
           Cancel
         </Button>
         <Button disabled={isWorking}>

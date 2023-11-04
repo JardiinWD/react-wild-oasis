@@ -60,7 +60,10 @@ export async function createEditCabin(newCabin, id) {
         throw new Error("Impossibile creare le cabine");
     }
 
-    // Carica l'immagine associata alla cabina nello storage di Supabase
+    // 2. Carica l'immagine associata alla cabina nello storage di Supabase
+
+    if (hasImagePath) return data;
+
     const { error: storageError } = await supabase
         .storage
         .from('cabin-images') // Nome del bucket
