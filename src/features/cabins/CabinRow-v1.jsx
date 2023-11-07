@@ -78,28 +78,26 @@ const CabinRow = ({ cabin }) => {
         <Price>{formatCurrency(regularPrice)}</Price>
         {discount ? (<Discount>{formatCurrency(discount)}</Discount>) : (<span>&mdash;</span>)}
         <div>
+          {/* Duplicate Cabin */}
+          <button onClick={handleDuplicate} disabled={isCreating}>
+            <HiOutlineSquare2Stack />
+          </button>
           <Modal>
-            <Menus.Menu>
-              <Menus.Toggle id={cabinId} />
-              <Menus.List id={cabinId}>
-                <Menus.Button icon={<HiOutlineSquare2Stack />} onClick={handleDuplicate}>Duplicate</Menus.Button>
-                {/* Edit Cabin */}
-                <Modal.Open opens="edit">
-                  <Menus.Button icon={<HiPencilSquare />}>Edit</Menus.Button>
-                </Modal.Open>
-                {/* Delete Cabin */}
-                <Modal.Open opens="delete">
-                  <Menus.Button icon={<HiOutlineTrash />}>Delete</Menus.Button>
-                </Modal.Open>
-              </Menus.List>
-            </Menus.Menu>
-
-
-            {/* Edit Window */}
+            {/* Edit Cabin */}
+            <Modal.Open opens="edit">
+              <button>
+                <HiPencilSquare />
+              </button>
+            </Modal.Open>
             <Modal.Window name="edit">
               <CreateCabinForm cabinToEdit={cabin} />  
             </Modal.Window>
-            {/* Delete Window */}
+            {/* Delete Cabin */}
+            <Modal.Open opens="delete">
+              <button>
+                <HiOutlineTrash />
+              </button>
+            </Modal.Open>
             <Modal.Window name="delete">
               <ConfirmDelete
                 resourceName="cabins"
@@ -108,6 +106,14 @@ const CabinRow = ({ cabin }) => {
               />
             </Modal.Window>
           </Modal>
+          <Menus.Menu>
+            <Menus.Toggle id={cabinId} />
+            <Menus.List id={cabinId}>
+              <Menus.Button icon={<HiOutlineSquare2Stack />} onClick={handleDuplicate}>Duplicate</Menus.Button>
+              <Menus.Button icon={<HiPencilSquare />}>Edit</Menus.Button>
+              <Menus.Button icon={<HiOutlineTrash />}>Delete</Menus.Button>
+            </Menus.List>
+          </Menus.Menu>
         </div>
       </Table.Row>
   )

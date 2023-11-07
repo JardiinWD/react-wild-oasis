@@ -1,3 +1,4 @@
+import { createContext, useContext } from "react";
 import styled from "styled-components";
 
 const StyledTable = styled.div`
@@ -11,6 +12,7 @@ const StyledTable = styled.div`
 
 const CommonRow = styled.div`
   display: grid;
+  // 4. Here I get the props.columns for grid columns template
   grid-template-columns: ${(props) => props.columns};
   column-gap: 2.4rem;
   align-items: center;
@@ -58,3 +60,65 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+
+// 1. Create the Context variable
+const TableContext = createContext()
+
+
+function Table({columns, children}) {
+  // 2. Define Provider inside Father component 
+  return (
+    <TableContext.Provider value={{columns}}>
+      <StyledTable role="table">
+        {children}
+      </StyledTable>
+    </TableContext.Provider>
+  )
+}
+
+// Child Component For Table Header
+function Header({children}) {
+  // 3. Get columns value from TableContext
+  const { columns } = useContext(TableContext)
+
+  return (
+    <StyledHeader role="row" columns={columns} as='header'>
+      {children}
+    </StyledHeader>
+  )
+}
+
+// Child Component For Table Rows
+function Row({children}) {
+  // 5. Get columns value from TableContext
+  const { columns } = useContext(TableContext)
+
+  return (
+    <StyledRow role="row" columns={columns}>
+      {children}
+    </StyledRow>
+  )
+}
+
+//6. Child Component For Table Body, get data and render prop
+function Body({data, render}) {
+  
+  if (data.length === 0) return <Empty>No data to show at the moment</Empty>
+  
+  return (
+    <StyledBody>
+      {data.map(render)}
+    </StyledBody>
+  )
+
+
+}
+
+// 7. Export all child components and the father itself
+Table.Header = Header;
+Table.Row = Row;
+Table.Body = Body;
+Table.Footer = Footer;
+
+
+export default Table
