@@ -1,9 +1,18 @@
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
+import Empty from "../../ui/Empty";
+import { useBookings } from './useBookings'
+import Spinner from "../../ui/Spinner";
 
 function BookingTable() {
-  const bookings = [];
+  // get bookings from custom hook
+  const { bookings, isLoading } = useBookings()
+  // Check if the project is actually loading data
+  if(isLoading) return <Spinner />
+  // If there are no data then return Empty component
+  if(!bookings.length) return <Empty resourceName='bookings' />
+
 
   return (
     <Menus>
