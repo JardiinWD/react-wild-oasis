@@ -16,20 +16,45 @@ export function useBookings() {
         value: filterValue
     }
 
-    // 4. Utilizza il hook useQuery per ottenere le prenotazioni
+    /* {
+        field: 'totalPrice',
+        value: 5000,
+        method: "gte"
+    } */
+
+    // 4.  Ottieni il valore di 'sortBy' dai parametri di ricerca dell'URL, se non presente utilizza 'startDate-desc' come valore di default
+    const sortByRaw = searchParams.get("sortBy") || 'startDate-desc';
+
+    // Dividi il valore di 'sortBy' in due parti: il campo per il sorting e la direzione di ordinamento
+    const [field, direction] = sortByRaw.split("-")
+
+    // Costruisci l'oggetto sortBy contenente il campo e la direzione di ordinamento
+    const sortBy = {
+        field,        // Campo per l'ordinamento, estratto dai parametri di ricerca 'sortBy'
+        direction     // Direzione di ordinamento, estratta dai parametri di ricerca 'sortBy'
+    }
+
+    // Pagination
+    const page = !searchParams.get('page') ? 1 : Number(searchParams.get('page'))
+
+    // 5. Utilizza il hook useQuery per ottenere le prenotazioni
     const {
         isLoading,     // Flag per indicare se i dati sono in fase di caricamento
-        data: bookings, // Dati delle prenotazioni ottenuti dalla query
+        data: {
+            data: bookings,
+            count
+        } = {}, // Dati delle prenotazioni ottenuti dalla query
         error          // Eventuali errori durante il caricamento dei dati
     } = useQuery({
-        queryKey: ['bookings'],              // Chiave unica per questa query
-        queryFn: () => getBookings({ filter }), // Funzione che chiama il servizio API per ottenere le prenotazioni, passando il filtro se presente
+        queryKey: ['bookings', filter, sortBy, page], // Chiave unica per questa query
+        queryFn: () => getBookings({ filter, sortBy, page }), // Funzione che chiama il servizio API per ottenere le prenotazioni, passando il filtro se presente
     });
 
-    // 5. Restituisci i risultati della query all'utilizzatore dello hook
+    // 6. Restituisci i risultati della query all'utilizzatore dello hook
     return {
         isLoading, // Flag per indicare se i dati sono in fase di caricamento
         error,     // Eventuali errori durante il caricamento dei dati
-        bookings   // Dati delle prenotazioni ottenuti dalla query
+        bookings,   // Dati delle prenotazioni ottenuti dalla query
+        count
     };
 }

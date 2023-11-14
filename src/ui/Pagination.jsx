@@ -1,4 +1,7 @@
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { PAGE_SIZE } from "../utils/constants";
 
 const StyledPagination = styled.div`
   width: 100%;
@@ -55,3 +58,56 @@ const PaginationButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+
+const Pagination = ({count}) => {
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  // Get currentPage from searchParams
+  const currentPage = !searchParams.get('page') ? 1 : Number(searchParams.get('page'))
+  // Page Count
+  const pageCount = Math.ceil(count / PAGE_SIZE);
+
+  // Next Page Handler
+  function nextPage() {
+    // Creo la variabile next sapendo che se sono all'interno della pagina corrente, ed é quella finale allora non posso avanzare, altrimenti incremento
+    const next = currentPage === pageCount ? currentPage : currentPage + 1
+    // Set del searchParams
+    searchParams.set('page', next)
+    setSearchParams(searchParams)
+  }
+
+  // Previous Page Handler
+  function prevPage() {
+    // Qui si esegue il contrario della variabile next
+    const prev = currentPage === 1 ? currentPage : currentPage - 1
+    // Set del searchParams
+    searchParams.set('page', prev)
+    setSearchParams(searchParams)
+  }
+
+  // Check sulla condizione di pageCount in caso di pochi risultati
+  if (pageCount <= 1 ) return null
+
+
+  return (
+    <StyledPagination>
+      <P>
+        Showing <span>{(currentPage - 1) * PAGE_SIZE + 1}</span> {""} to {""} 
+        <span>{currentPage === pageCount ? count : currentPage * PAGE_SIZE}</span> {""} of {""}
+        <span>{count}</span> {""} results
+      </P>
+      <Buttons>
+        <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
+          <HiChevronLeft /> <span>Previous</span>
+        </PaginationButton>
+        <PaginationButton onClick={nextPage} disabled={currentPage === pageCount}>
+          <span>Next</span>
+          <HiChevronRight /> 
+        </PaginationButton>
+      </Buttons>
+    </StyledPagination>
+  )
+}
+
+export default Pagination

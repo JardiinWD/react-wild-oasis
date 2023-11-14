@@ -4,10 +4,11 @@ import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
 import { useBookings } from './useBookings'
 import Spinner from "../../ui/Spinner";
+import Pagination from '../../ui/Pagination'
 
 function BookingTable() {
   // get bookings from custom hook
-  const { bookings, isLoading } = useBookings()
+  const { bookings, isLoading, count } = useBookings()
   // Check if the project is actually loading data
   if(isLoading) return <Spinner />
   // If there are no data then return Empty component
@@ -32,6 +33,9 @@ function BookingTable() {
             <BookingRow key={booking.id} booking={booking} />
           )}
         />
+        <Table.Footer>
+          <Pagination count={count} />
+        </Table.Footer>
       </Table>
     </Menus>
   );
