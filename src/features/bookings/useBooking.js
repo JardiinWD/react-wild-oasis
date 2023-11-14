@@ -17,7 +17,7 @@ export function useBooking() {
         data: booking,       // Booking data obtained from the query
         error               // Error, if any, during the query execution
     } = useQuery({
-        queryKey: ['booking'],  // Unique key for this query
+        queryKey: ['booking', bookingId],  // Unique key for this query
         queryFn: () => getBooking(bookingId),    // Function to fetch Booking data
         retry: false, // Evitare di rifetchare + di 3 volte i dati con React Query
     });

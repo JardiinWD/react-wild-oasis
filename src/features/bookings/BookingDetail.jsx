@@ -11,6 +11,7 @@ import ButtonText from "../../ui/ButtonText";
 import { useMoveBack } from "../../hooks/useMoveBack";
 import { useBooking } from "./useBooking";
 import Spinner from "../../ui/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -23,6 +24,8 @@ function BookingDetail() {
   const { booking, isLoading } = useBooking();
   // create a variable with useMoveBack custom hook
   const moveBack = useMoveBack();
+  // Navigate function
+  const navigate = useNavigate()
   // Check if the data is loading from React Query
   if(isLoading) return <Spinner />
   // Get the current status and the ID from Booking
@@ -50,6 +53,14 @@ function BookingDetail() {
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
+        {status === 'unconfirmed' && (
+            <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
+              Check in
+            </Button>
+          )
+        }
+
+
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>
