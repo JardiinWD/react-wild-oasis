@@ -19,7 +19,9 @@ export function useLogin() {
         // Gestione in caso di successo
         onSuccess: (user) => {
             queryClient.setQueriesData(['user'], user) // Set dei dati dello user dentro la cache
-            navigate('/dashboard'); // Naviga verso la dashboard in caso di successo
+            navigate('/dashboard', {
+                replace: true
+            }); // Naviga verso la dashboard in caso di successo
         },
         // Gestione in caso di errore
         onError: (err) => {

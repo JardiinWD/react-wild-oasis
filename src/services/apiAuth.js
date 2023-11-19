@@ -37,5 +37,11 @@ export async function getCurrentUser() {
         // Restituisci i dati
         return data?.user;
     }
+}
 
+export async function logout() {
+
+    const { error } = await supabase.auth.signOut()
+    // Gestisce eventuali errori durante il processo di login
+    if (error) throw new Error(error.message);
 }
