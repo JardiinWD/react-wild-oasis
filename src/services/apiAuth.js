@@ -1,5 +1,26 @@
 import supabase from './supabase';
 
+export async function signup({ fullName, email, password }) {
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                fullName,
+                avatar: ""
+            }
+        }
+    })
+
+    // Gestisce eventuali errori durante il processo di login
+    if (error) throw new Error(error.message);
+
+    // Restituisci i dati
+    return data;
+}
+
+
+
 // Funzione per effettuare il login utilizzando Supabase Authentication
 // 1. Creare utente su Supabase in authentication - esempio: alessandro-oasis@example.com
 // 2. Creare la funzionalità di login che accetta email e password
@@ -20,9 +41,7 @@ export async function login({ email, password }) {
 
 export async function getCurrentUser() {
     // controlla dal localStorage se c'é una sessione attiva
-    const {
-        data: session
-    } = await supabase.auth.getSession();
+    const { data: session } = await supabase.auth.getSession();
 
     // Se non ci sono utenti attivi allora return di null
     if (!session.session) {
