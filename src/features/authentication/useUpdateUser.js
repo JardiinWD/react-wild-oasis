@@ -20,8 +20,8 @@ export function useUpdateUser() {
         onSuccess: ({ user }) => {
             // If editing is successful, show a success notification and invalidate the "user" query
             toast.success('User successfully edited');
-            // queryClient.setQueryData('user', user)
-            queryClient.invalidateQueries({ queryKey: ["user"] });
+            queryClient.setQueryData(['user'], user)
+            // queryClient.invalidateQueries({ queryKey: ["user"] });
             // reset(); // Reset the React form (reset function)
         },
         onError: (error) => toast.error(error.message)  // Handle errors by showing an error notification
