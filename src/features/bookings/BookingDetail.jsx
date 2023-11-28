@@ -33,6 +33,8 @@ function BookingDetail() {
   const navigate = useNavigate()
   // Checkout Function 
   const { checkout, isCheckingOut } = useCheckout()
+  // DeleteBooking Function 
+  const { deleteBooking, isDeleting } = useDeleteBooking()
   // Check if the data is loading from React Query
   if(isLoading) return <Spinner />
   // Get the current status and the ID from Booking
@@ -47,11 +49,9 @@ function BookingDetail() {
     "checked-out": "silver",
   };
 
-  const { deleteBooking, isDeleting } = useDeleteBooking()
+ 
 
   return (
-
-    
     <>
       <Row type="horizontal">
         <HeadingGroup>
